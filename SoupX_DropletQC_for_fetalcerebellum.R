@@ -4,7 +4,7 @@ library(patchwork)
 library(SoupX)
 
 #remove the ambient RNA form the cells using SoupX for each sample
-sc= load10X('E:/cellranger3.1_gh38/FB20191')
+sc= load10X('.../file/FB20191')
 sc = autoEstCont(sc)
 out = adjustCounts(sc)
 pbmc <- CreateSeuratObject(counts = out, project = "pbmc3k", min.cells = 3, min.features = 200)
@@ -35,13 +35,13 @@ DimPlot(pbmc, reduction = "umap")
 library(DropletQC)
 
 nf2 <- nuclear_fraction_annotation(
-  annotation_path = "/data/tianlab/ZailiLuo/cellranger3.1_gh38/hg38_genes.gtf",
-  bam ="/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20195/possorted_genome_bam.bam",
-  barcodes = "/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20195/filtered_feature_bc_matrix/barcodes.tsv.gz",
+  annotation_path = "/data/.../hg38_genes.gtf",
+  bam ="/data/.../possorted_genome_bam.bam",
+  barcodes = "/data/.../barcodes.tsv.gz",
   tiles = 1, cores = 1, verbose = FALSE)
-saveRDS(nf2, file = "/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20191_nf2.rds")
+saveRDS(nf2, file = "/data/.../FB20191_nf2.rds")
 
-nf2=readRDS("E:/cellranger3.1_gh38/FB20191_nf2.rds")
+nf2=readRDS("/data/.../FB20191_nf2.rds")
 pbmc<-AddMetaData(pbmc, nf2)
 
 input=pbmc@meta.data[,c("nuclear_fraction","nCount_RNA")]
@@ -52,7 +52,7 @@ pbmc<-AddMetaData(pbmc, input2.dc[[1]])
 head(pbmc)
 DimPlot(pbmc, group.by = "cell_status")
 
-saveRDS(pbmc, file = "E:/cellranger3.1_gh38/FB20191_SoupX_nf2_dc.rds")
+saveRDS(pbmc, file = "E:/..../FB20191_SoupX_nf2_dc.rds")
 
 
 #Merge these samples together
@@ -62,14 +62,14 @@ library(Seurat)
 library(patchwork)
 library(cowplot)
 
-PCW8 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB15_SoupX_nf2_dc.rds")
-PCW9 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB13_SoupX_nf2_dc.rds")
-PCW12 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20195_SoupX_nf2_dc.rds")
-PCW13 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20197_SoupX_nf2_dc.rds")
-PCW14 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20192_SoupX_nf2_dc.rds")
-PCW15 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20191_SoupX_nf2_dc.rds")
-PCW16 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20193_SoupX_nf2_dc.rds")
-PCW17 = readRDS("/data/tianlab/ZailiLuo/cellranger3.1_gh38/FB20194_SoupX_nf2_dc.rds")
+PCW8 = readRDS(".../file/FB15_SoupX_nf2_dc.rds")
+PCW9 = readRDS(".../file/FB13_SoupX_nf2_dc.rds")
+PCW12 = readRDS(".../file/FB20195_SoupX_nf2_dc.rds")
+PCW13 = readRDS(".../file/FB20197_SoupX_nf2_dc.rds")
+PCW14 = readRDS(".../file/FB20192_SoupX_nf2_dc.rds")
+PCW15 = readRDS(".../file/FB20191_SoupX_nf2_dc.rds")
+PCW16 = readRDS(".../file/FB20193_SoupX_nf2_dc.rds")
+PCW17 = readRDS(".../file/FB20194_SoupX_nf2_dc.rds")
 pbmc = merge(x = PCW8, y = c(PCW9, PCW12, PCW13, PCW14, PCW15, PCW16, PCW17))
 
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -104,4 +104,4 @@ pbmc@meta.data$celltype=pbmc@active.ident
 DimPlot(pbmc, reduction = "umap", label = TRUE, raster=FALSE, pt.size = 0.5)
 DimPlot(pbmc, group.by = "cell_status", raster=FALSE)
 table(pbmc$celltype, pbmc$cell_status)
-saveRDS(pbmc, file = "/data/tianlab/ZailiLuo/cellranger3.1_gh38/fetel_cerebellum_SoupX_nf2_dc_ep.rds")
+saveRDS(pbmc, file = "..../file/fetel_cerebellum_final.rds")
